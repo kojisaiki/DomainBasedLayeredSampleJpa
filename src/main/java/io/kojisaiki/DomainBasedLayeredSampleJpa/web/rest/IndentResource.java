@@ -1,8 +1,7 @@
-package io.kojisaiki.DomainBasedWorkflowSample.web.rest;
+package io.kojisaiki.DomainBasedLayeredSampleJpa.web.rest;
 
-import io.kojisaiki.DomainBasedWorkflowSample.entity.Indent;
-import io.kojisaiki.DomainBasedWorkflowSample.service.IndentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.Indent;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.service.IndentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

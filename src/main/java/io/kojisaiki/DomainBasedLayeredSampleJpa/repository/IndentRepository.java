@@ -1,6 +1,6 @@
-package io.kojisaiki.DomainBasedWorkflowSample.repository;
+package io.kojisaiki.DomainBasedLayeredSampleJpa.repository;
 
-import io.kojisaiki.DomainBasedWorkflowSample.entity.Indent;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.Indent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package io.kojisaiki.DomainBasedWorkflowSample;
+package io.kojisaiki.DomainBasedLayeredSampleJpa;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

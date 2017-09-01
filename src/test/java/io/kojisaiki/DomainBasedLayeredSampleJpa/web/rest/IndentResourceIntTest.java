@@ -1,27 +1,35 @@
-package io.kojisaiki.DomainBasedWorkflowSample.service;
+package io.kojisaiki.DomainBasedLayeredSampleJpa.web.rest;
 
-import io.kojisaiki.DomainBasedWorkflowSample.DomainBasedLayeredSampleJpaApplication;
-import io.kojisaiki.DomainBasedWorkflowSample.entity.Indent;
-import io.kojisaiki.DomainBasedWorkflowSample.entity.IndentDetail;
-import io.kojisaiki.DomainBasedWorkflowSample.repository.IndentRepository;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.DomainBasedLayeredSampleJpaApplication;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.Indent;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.IndentDetail;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.repository.IndentRepository;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.service.IndentService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DomainBasedLayeredSampleJpaApplication.class)
-@Transactional
-public class IndentServiceIntTest {
+public class IndentResourceIntTest {
+
+    @Autowired
+    EntityManager em;
 
     @Autowired
     IndentService indentService;
@@ -33,6 +41,16 @@ public class IndentServiceIntTest {
      * test data
      */
     List<Indent> indents;
+
+    private MockMvc restIndentMockMvc;
+
+    @Before
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+        IndentResource indentResource = new IndentResource(indentService);
+        this.restIndentMockMvc = MockMvcBuilders.standaloneSetup(indentResource)
+                .build();
+    }
 
     private String DATA_INDENT_1_TITLE = "indent 1";
     private String DATA_INDENT_1_DETAIL_1_TITLE = "detail 1 - 1";
@@ -77,38 +95,21 @@ public class IndentServiceIntTest {
     }
 
     @Test
-    public void assertThatGetIndents() {
+    public void getIndents() throws Exception {
         // given
         indents.stream()
                 .forEach(indent -> {
                     indentRepository.save(indent);
                 });
 
-        // when
-        List<Indent> fetched = indentService.getIndents();
-
-        // then
-        assertThat(fetched.size()).isEqualTo(2);
-        assertThat(fetched.get(0).getTitle()).isEqualTo(DATA_INDENT_1_TITLE);
-        assertThat(fetched.get(0).getIndentDetails().get(0).getTitle()).isEqualTo(DATA_INDENT_1_DETAIL_1_TITLE);
-        assertThat(fetched.get(0).getIndentDetails().get(1).getTitle()).isEqualTo(DATA_INDENT_1_DETAIL_2_TITLE);
-        assertThat(fetched.get(1).getTitle()).isEqualTo(DATA_INDENT_2_TITLE);
-        assertThat(fetched.get(1).getIndentDetails().get(0).getTitle()).isEqualTo(DATA_INDENT_2_DETAIL_1_TITLE);
-        assertThat(fetched.get(1).getIndentDetails().get(1).getTitle()).isEqualTo(DATA_INDENT_2_DETAIL_2_TITLE);
-    }
-
-    @Test
-    public void assertThatAddNewIndent() {
-        // given
-        Indent allowdIndent = indentService.addNewIndent(indents.get(0));
-
-        // when
-        Indent assertIndent = indentRepository.getOne(allowdIndent.getId());
-
-        // then
-        assertThat(allowdIndent.getId()).isNotNull();
-        assertThat(allowdIndent.getTitle()).isEqualTo(indents.get(0).getTitle());
-        assertThat(allowdIndent.getIndentDetails().get(0).getTitle()).isEqualTo(indents.get(0).getIndentDetails().get(0).getTitle());
-        assertThat(allowdIndent.getIndentDetails().get(1).getTitle()).isEqualTo(indents.get(0).getIndentDetails().get(1).getTitle());
+        // when, then
+        restIndentMockMvc.perform(get("/_api/indents"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title", is(DATA_INDENT_1_TITLE)))
+                .andExpect(jsonPath("$[0].indentDetails[0].title", is(DATA_INDENT_1_DETAIL_1_TITLE)))
+                .andExpect(jsonPath("$[0].indentDetails[1].title", is(DATA_INDENT_1_DETAIL_2_TITLE)))
+                .andExpect(jsonPath("$[1].title", is(DATA_INDENT_2_TITLE)))
+                .andExpect(jsonPath("$[1].indentDetails[0].title", is(DATA_INDENT_2_DETAIL_1_TITLE)))
+                .andExpect(jsonPath("$[1].indentDetails[1].title", is(DATA_INDENT_2_DETAIL_2_TITLE)));
     }
 }
