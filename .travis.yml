@@ -7,7 +7,7 @@ jobs:
   include:
     - stage: test
       jdk: oraclejdk8
-      script: gradlew test
+      script: ./gradlew test
 
 notifications:
   email: false
