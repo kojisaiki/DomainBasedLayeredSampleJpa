@@ -1,6 +1,6 @@
 package io.kojisaiki.DomainBasedWorkflowSample.web.rest;
 
-import io.kojisaiki.DomainBasedWorkflowSample.DomainBasedWorkflowSampleApplication;
+import io.kojisaiki.DomainBasedWorkflowSample.DomainBasedLayeredSampleJpaApplication;
 import io.kojisaiki.DomainBasedWorkflowSample.entity.Indent;
 import io.kojisaiki.DomainBasedWorkflowSample.entity.IndentDetail;
 import io.kojisaiki.DomainBasedWorkflowSample.repository.IndentRepository;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DomainBasedWorkflowSampleApplication.class)
+@SpringBootTest(classes = DomainBasedLayeredSampleJpaApplication.class)
 public class IndentResourceIntTest {
 
     @Autowired
@@ -99,11 +99,13 @@ public class IndentResourceIntTest {
 
     @Test
     public void getIndents() throws Exception {
+        // given
         indents.stream()
                 .forEach(indent -> {
                     indentRepository.save(indent);
                 });
 
+        // when, then
         restIndentMockMvc.perform(get("/_api/indents"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].title", is(DATA_INDENT_1_TITLE)))

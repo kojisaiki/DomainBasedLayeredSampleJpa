@@ -1,6 +1,6 @@
 package io.kojisaiki.DomainBasedWorkflowSample.service;
 
-import io.kojisaiki.DomainBasedWorkflowSample.DomainBasedWorkflowSampleApplication;
+import io.kojisaiki.DomainBasedWorkflowSample.DomainBasedLayeredSampleJpaApplication;
 import io.kojisaiki.DomainBasedWorkflowSample.entity.Indent;
 import io.kojisaiki.DomainBasedWorkflowSample.entity.IndentDetail;
 import io.kojisaiki.DomainBasedWorkflowSample.repository.IndentRepository;
@@ -19,7 +19,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DomainBasedWorkflowSampleApplication.class)
+@SpringBootTest(classes = DomainBasedLayeredSampleJpaApplication.class)
 @Transactional
 public class IndentServiceIntTest {
 
@@ -78,13 +78,16 @@ public class IndentServiceIntTest {
 
     @Test
     public void assertThatGetIndents() {
+        // given
         indents.stream()
                 .forEach(indent -> {
                     indentRepository.save(indent);
                 });
 
+        // when
         List<Indent> fetched = indentService.getIndents();
 
+        // then
         assertThat(fetched.size()).isEqualTo(2);
         assertThat(fetched.get(0).getTitle()).isEqualTo(DATA_INDENT_1_TITLE);
         assertThat(fetched.get(0).getIndentDetails().get(0).getTitle()).isEqualTo(DATA_INDENT_1_DETAIL_1_TITLE);
@@ -96,9 +99,13 @@ public class IndentServiceIntTest {
 
     @Test
     public void assertThatAddNewIndent() {
+        // given
         Indent allowdIndent = indentService.addNewIndent(indents.get(0));
 
+        // when
         Indent assertIndent = indentRepository.getOne(allowdIndent.getId());
+
+        // then
         assertThat(allowdIndent.getId()).isNotNull();
         assertThat(allowdIndent.getTitle()).isEqualTo(indents.get(0).getTitle());
         assertThat(allowdIndent.getIndentDetails().get(0).getTitle()).isEqualTo(indents.get(0).getIndentDetails().get(0).getTitle());
