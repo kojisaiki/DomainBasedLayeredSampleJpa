@@ -1,4 +1,4 @@
-package io.kojisaiki.DomainBasedLayeredSampleJpa.repository;
+package io.kojisaiki.DomainBasedLayeredSampleJpa.entity.repository;
 
 import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.Indent;
 import org.springframework.data.jpa.repository.JpaRepository;
