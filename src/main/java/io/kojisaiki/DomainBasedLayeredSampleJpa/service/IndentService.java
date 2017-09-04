@@ -1,7 +1,7 @@
 package io.kojisaiki.DomainBasedLayeredSampleJpa.service;
 
 import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.Indent;
-import io.kojisaiki.DomainBasedLayeredSampleJpa.repository.IndentRepository;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.repository.IndentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

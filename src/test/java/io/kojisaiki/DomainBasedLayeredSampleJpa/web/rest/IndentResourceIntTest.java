@@ -3,7 +3,7 @@ package io.kojisaiki.DomainBasedLayeredSampleJpa.web.rest;
 import io.kojisaiki.DomainBasedLayeredSampleJpa.DomainBasedLayeredSampleJpaApplication;
 import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.Indent;
 import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.IndentDetail;
-import io.kojisaiki.DomainBasedLayeredSampleJpa.repository.IndentRepository;
+import io.kojisaiki.DomainBasedLayeredSampleJpa.entity.repository.IndentRepository;
 import io.kojisaiki.DomainBasedLayeredSampleJpa.service.IndentService;
 import org.junit.Before;
 import org.junit.Test;
