@@ -12,3 +12,5 @@
 
 - MyBatis版
 - GUIでの動作確認（Webページ or Swagger）
+- 開発/本番のDB切替
+- アプリ起動時にスキーマ構築⇒Dockerfile, docker-compose.yml
